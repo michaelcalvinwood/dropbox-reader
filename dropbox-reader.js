@@ -81,17 +81,38 @@ const listFiles = async (path) => {
     }
 }
 
+const list = [];
+
+const processFiles = (files) => {
+    const { entries } = files;
+
+    console.log(files);
+    entries.forEach(entry => {
+        const tag = entry['.tag'];
+        if (tag === 'file') {
+            const { name, path_display, client_modified, rev, id } = entry;
+            list.push({
+                name, path: path_display, modified: client_modified, rev, id
+            })
+        }
+    })
+}
+
 const getList = async () => {
-    const list = [];
+
 
     let files = await listFiles('/DataVizFolder/');
+    processFiles(files);
     let { has_more } = files;
     let { cursor } = files;
     while (has_more) {
         let files = await listContinue(cursor);
+        processFiles(files);
         has_more = files.has_more;
         cursor = files.cursor
     }
+
+    console.log(list)
 }
 
 getList();
