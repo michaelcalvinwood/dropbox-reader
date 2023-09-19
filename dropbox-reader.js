@@ -9,6 +9,13 @@ const axios = require('axios');
 
 const { DROPBOX_TOKEN } = process.env;
 
+/*
+ * Global variables
+ */
+
+const list = []; // list of all files
+const csv = []; // list of csv files
+
 const getFileUrl = async (id) => {
     const request = {
         url: 'https://api.dropboxapi.com/2/file_requests/get',
@@ -81,12 +88,9 @@ const listFiles = async (path) => {
     }
 }
 
-const list = [];
 
 const processFiles = (files) => {
     const { entries } = files;
-
-    console.log(files);
     entries.forEach(entry => {
         const tag = entry['.tag'];
         if (tag === 'file') {
@@ -99,8 +103,6 @@ const processFiles = (files) => {
 }
 
 const getList = async () => {
-
-
     let files = await listFiles('/DataVizFolder/');
     processFiles(files);
     let { has_more } = files;
@@ -111,8 +113,18 @@ const getList = async () => {
         has_more = files.has_more;
         cursor = files.cursor
     }
-
-    console.log(list)
 }
 
-getList();
+const getCsv = () => {
+    for (let i = 0; i < list.length; ++i) {
+        if (list[i].path.endsWith('.csv')) csv.push(list[i])
+    }
+}
+
+const loadSQL = async () => {
+    await getList();
+    getCsv();
+    console.log(csv);
+}
+
+loadSQL();
