@@ -16,7 +16,11 @@ const { DROPBOX_TOKEN } = process.env;
 const list = []; // list of all files
 const csv = []; // list of csv files
 
+
 const getFileUrl = async (id) => {
+    if (id.startsWith('id:')) id = id.substring(3);
+    console.log('id:', id);
+    //return;
     const request = {
         url: 'https://api.dropboxapi.com/2/file_requests/get',
         method: 'post',
@@ -33,7 +37,7 @@ const getFileUrl = async (id) => {
         response = await axios(request);
         return(response.data);
     } catch(err) {
-        console.error(err);
+        console.error(err.response.data);
         return false;
     }
 }
@@ -124,7 +128,9 @@ const getCsv = () => {
 const loadSQL = async () => {
     await getList();
     getCsv();
-    console.log(csv);
+    console.log(csv[0])
+    const fileUrl = await getFileUrl(csv[1].id)
+    console.log(fileUrl)
 }
 
 loadSQL();
