@@ -4,7 +4,7 @@
   "description": "",
   "main": "dropbox-reader.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node dropbox-reader.js"
   },
   "author": "Michael Wood",
   "license": "SEE LICENSE IN license.md",
@@ -12,6 +12,8 @@
     "axios": "^1.4.0",
     "csv-parse": "^5.5.0",
     "dotenv": "^16.3.1",
+    "lodash.get": "^4.4.2",
+    "mongodb": "^6.2.0",
     "mysql2": "^3.6.0"
   }
 }
